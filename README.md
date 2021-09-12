@@ -7,16 +7,10 @@ A lightweight, open source FaaS (Function as a Service) framework for Deno.
 The framework allows you to go from:
 
 ```ts
-/**
- * Send "Hello, World!"
- * @param request The Deno request https://deno.land/std@0.74.0/http/server.ts
- */
-export default async (request) => {
-  request.respond({
-    status: 200,
-    body: 'Hello, World!',
-  });
-};
+import type { Context } from "https://deno.land/x/oak@v9.0.0/mod.ts";
+export function hello(ctx: Context) {
+  ctx.response.body = "Hello, World!";
+}
 ```
 
 To:
@@ -44,21 +38,20 @@ There's no installation step for this library. It's Deno.
 
 > Assumes you have [Deno installed](https://deno.land/#installation)
 
-1. Create an `main.ts` file with the following contents:
+1. Create an `test/hello.ts` file with the following contents:
 
     ```ts
-    export default async (request) => {
-      request.respond({
-        status: 200,
-        body: 'Hello, World!',
-      });
-    };
+    import type { Context } from "https://deno.land/x/oak@v9.0.0/mod.ts";
+
+    export function hello(ctx: Context) {
+      ctx.response.body = "Hello, World!";
+    }
     ```
 
 1. Start the local server:
 
     ```sh
-    deno run --allow-net --allow-read --allow-env main.ts
+    deno run -A ./run.ts --target=hello --source=test/hello.ts
     ```
 
 1. Send requests to this function using `curl` from another terminal window:
@@ -69,6 +62,8 @@ There's no installation step for this library. It's Deno.
     ```
 
 ## Run in Container
+
+__TODO: FIXME__
 
 You can also run this server in a container:
 
